@@ -89,38 +89,37 @@ void GxIO_STM32F4_FSMC::reset()
 
 void GxIO_STM32F4_FSMC::init()
 {
-  
   /* START INIT ROBBED FROM https://github.com/OutOfTheBots/ili9341_16bit_touch/blob/master/ili9341.c FOR 100MHz FSMC */
   //enable RCC for FSMC and both GPIO ports
-	//RCC->AHB3ENR |= RCC_AHB3ENR_FSMCEN;
-	//RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN | RCC_AHB1ENR_GPIOEEN;
+	// RCC->AHB3ENR |= RCC_AHB3ENR_FSMCEN;
+	// RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN | RCC_AHB1ENR_GPIOEEN;
 
-	//setup pins as AF
-	//GPIOD->MODER |= GPIO_MODER_MODER0_1 | GPIO_MODER_MODER1_1 | GPIO_MODER_MODER4_1 | GPIO_MODER_MODER5_1 | GPIO_MODER_MODER7_1 | GPIO_MODER_MODER8_1 | GPIO_MODER_MODER9_1 | GPIO_MODER_MODER10_1 | GPIO_MODER_MODER11_1 | GPIO_MODER_MODER14_1 | GPIO_MODER_MODER15_1;
-	//GPIOE->MODER |= GPIO_MODER_MODER7_1 | GPIO_MODER_MODER8_1 | GPIO_MODER_MODER9_1 | GPIO_MODER_MODER10_1  | GPIO_MODER_MODER11_1 | GPIO_MODER_MODER12_1 | GPIO_MODER_MODER13_1 | GPIO_MODER_MODER14_1 |  GPIO_MODER_MODER15_1;
-	//setup pins as PP
-	//GPIOD->OTYPER &= 0b0011000001001100;
-	//GPIOE->OTYPER &= 0b0000000001111111;
-	//set speed to 100MHz
-	//GPIOD->OSPEEDR |= (0b11<<(2*0)) | (0b11<<(2*1)) | (0b11<<(2*4)) | (0b11<<(2*5)) | (0b11<<(2*7)) | (0b11<<(2*8)) | (0b11<<(2*9)) | (0b11<<(2*10)) | (0b11<<(2*11)) | (0b11<<(2*14)) | (0b11<<(2*15));
-	//GPIOE->OSPEEDR |= (0b11<<(2*7)) | (0b11<<(2*8)) | (0b11<<(2*9)) | (0b11<<(2*10)) | (0b11<<(2*11)) | (0b11<<(2*12)) | (0b11<<(2*13)) | (0b11<<(2*14)) | (0b11<<(2*15));
-	//set NO pull-up or pull-down
-	//GPIOD->PUPDR &= ((0b11<<(2*2)) | (0b11<<(2*3)) | (0b11<<(2*6)) | (0b11<<(2*12)) | (0b11<<(2*13)));
-	//GPIOE->PUPDR &= ((0b11<<(2*0)) | (0b11<<(2*1)) | (0b11<<(2*2)) | (0b11<<(2*3)) | (0b11<<(2*4)) | (0b11<<(2*5)) | (0b11<<(2*6)));
-	//set other pins to AF12 i.e as FSMC pins
-	//GPIOD->AFR[0] = (GPIOD->AFR[0] & (0b1111<<(4*2) | 0b1111<<(4*3) | 0b1111<<(4*6))) | 0b1100<<(4*0) | 0b1100<<(4*1) | 0b1100<<(4*4) | 0b1100<<(4*5) | 0b1100<<(4*7);
-	//GPIOD->AFR[1] = (GPIOD->AFR[1] & (0b1111<<(4*(13-8)) | 0b1111<<(4*(12-8)))) | 0b1100<<(4*(8-8)) | 0b1100<<(4*(9-8)) | 0b1100<<(4*(10-8)) | 0b1100<<(4*(11-8)) | 0b1100<<(4*(14-8)) | 0b1100<<(4*(15-8));
-	//GPIOE->AFR[0] = (GPIOE->AFR[0] & ~(0b1111<<7)) | 0b1100<<(4*7);
-	//GPIOE->AFR[1] = 0xCCCCCCCC;
+	// //setup pins as AF
+	// GPIOD->MODER |= GPIO_MODER_MODER0_1 | GPIO_MODER_MODER1_1 | GPIO_MODER_MODER4_1 | GPIO_MODER_MODER5_1 | GPIO_MODER_MODER7_1 | GPIO_MODER_MODER8_1 | GPIO_MODER_MODER9_1 | GPIO_MODER_MODER10_1 | GPIO_MODER_MODER11_1 | GPIO_MODER_MODER14_1 | GPIO_MODER_MODER15_1;
+	// GPIOE->MODER |= GPIO_MODER_MODER7_1 | GPIO_MODER_MODER8_1 | GPIO_MODER_MODER9_1 | GPIO_MODER_MODER10_1  | GPIO_MODER_MODER11_1 | GPIO_MODER_MODER12_1 | GPIO_MODER_MODER13_1 | GPIO_MODER_MODER14_1 |  GPIO_MODER_MODER15_1;
+	// //setup pins as PP
+	// GPIOD->OTYPER &= 0b0011000001001100;
+	// GPIOE->OTYPER &= 0b0000000001111111;
+	// //set speed to 100MHz
+	// GPIOD->OSPEEDR = ( GPIOD->OSPEEDR & ~PD_MODE_MASK) | PD_OSPD_FSMC; //|= (0b11<<(2*0)) | (0b11<<(2*1)) | (0b11<<(2*4)) | (0b11<<(2*5)) | (0b11<<(2*7)) | (0b11<<(2*8)) | (0b11<<(2*9)) | (0b11<<(2*10)) | (0b11<<(2*11)) | (0b11<<(2*14)) | (0b11<<(2*15));
+	// GPIOE->OSPEEDR = (GPIOE->OSPEEDR & ~PE_MODE_MASK) | PE_OSPD_FSMC;//|= (0b11<<(2*7)) | (0b11<<(2*8)) | (0b11<<(2*9)) | (0b11<<(2*10)) | (0b11<<(2*11)) | (0b11<<(2*12)) | (0b11<<(2*13)) | (0b11<<(2*14)) | (0b11<<(2*15));
+	// //set NO pull-up or pull-down
+	// GPIOD->PUPDR &= ((0b11<<(2*2)) | (0b11<<(2*3)) | (0b11<<(2*6)) | (0b11<<(2*12)) | (0b11<<(2*13)));
+	// GPIOE->PUPDR &= ((0b11<<(2*0)) | (0b11<<(2*1)) | (0b11<<(2*2)) | (0b11<<(2*3)) | (0b11<<(2*4)) | (0b11<<(2*5)) | (0b11<<(2*6)));
+	// //set other pins to AF12 i.e as FSMC pins
+	// GPIOD->AFR[0] = (GPIOD->AFR[0] & (0b1111<<(4*2) | 0b1111<<(4*3) | 0b1111<<(4*6))) | 0b1100<<(4*0) | 0b1100<<(4*1) | 0b1100<<(4*4) | 0b1100<<(4*5) | 0b1100<<(4*7);
+	// GPIOD->AFR[1] = (GPIOD->AFR[1] & (0b1111<<(4*(13-8)) | 0b1111<<(4*(12-8)))) | 0b1100<<(4*(8-8)) | 0b1100<<(4*(9-8)) | 0b1100<<(4*(10-8)) | 0b1100<<(4*(11-8)) | 0b1100<<(4*(14-8)) | 0b1100<<(4*(15-8));
+	// GPIOE->AFR[0] = (GPIOE->AFR[0] & ~(0b1111<<7)) | 0b1100<<(4*7);
+	// GPIOE->AFR[1] = 0xCCCCCCCC;
   /* END INIT ROBBED FROM https://github.com/OutOfTheBots/ili9341_16bit_touch/blob/master/ili9341.c FOR 100MHz FSMC */
 
 	//setup FSMC on Bank1 NORSRAM1
 	//setup timings of FSCM
-	FSMC_Bank1->BTCR[1] = FSMC_BTR1_ADDSET_1 | FSMC_BTR1_DATAST_1;
+	//FSMC_Bank1->BTCR[1] = FSMC_BTR1_ADDSET_1 | FSMC_BTR1_DATAST_1;
 	// Bank1 NOR/SRAM control register configuration
-	FSMC_Bank1->BTCR[0] = FSMC_BCR1_MWID_0 | FSMC_BCR1_WREN | FSMC_BCR1_MBKEN;
-  
-  
+	//FSMC_Bank1->BTCR[0] = FSMC_BCR1_MWID_0 | FSMC_BCR1_WREN | FSMC_BCR1_MBKEN;
+
+
   RCC->AHB1ENR   |= 0x00000078;
   volatile uint32_t t = RCC->AHB1ENR; // delay
 
@@ -142,8 +141,8 @@ void GxIO_STM32F4_FSMC::init()
   t = RCC->AHB1ENR; // delay
   (void)(t);
 
-  FSMC_Bank1->BTCR[0] = 0x000010D9;
-  FSMC_Bank1->BTCR[1] = (DATAST << 8) | ADDSET;
+   FSMC_Bank1->BTCR[0] = FSMC_BCR1_MWID_0 | FSMC_BCR1_WREN | FSMC_BCR1_MBKEN;//0x000010D9;
+   FSMC_Bank1->BTCR[1] = FSMC_BTR1_ADDSET_1 | FSMC_BTR1_DATAST_1;//(DATAST << 8) | ADDSET;
 
   digitalWrite(_bl, LOW);
   pinMode(_bl, OUTPUT);
