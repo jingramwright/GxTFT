@@ -253,7 +253,7 @@ void GxCTRL_R61529::init()
   IO.writeDataTransaction(0x00); // data is not flipped in any way?
 
   IO.writeCommandTransaction(0x3A); // set_pixel_format
-  IO.writeDataTransaction(0x77);// 16-Bit/pixel = 55h, 24-bit/pixel = 77h
+  IO.writeDataTransaction(0x55);// 16-Bit/pixel = 55h, 24-bit/pixel = 77h
 
   IO.writeCommandTransaction(0x2A); //set_column_address
   IO.writeDataTransaction(0x00); // starts from 0th frame buffer address
